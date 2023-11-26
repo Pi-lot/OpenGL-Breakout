@@ -38,7 +38,7 @@ namespace OpenGL_Breakout {
         protected override void OnRenderFrame(FrameEventArgs args) {
             base.OnRenderFrame(args);
 
-            GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
             breakout.Render();
 
