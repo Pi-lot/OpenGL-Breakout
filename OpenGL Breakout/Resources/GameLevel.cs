@@ -37,8 +37,6 @@ namespace OpenGL_Breakout.Resources {
                     }
                 }
             }
-
-            throw new NotImplementedException();
         }
 
         public void Load(string file, int levelWidth, int levelHeight) {
@@ -49,7 +47,11 @@ namespace OpenGL_Breakout.Resources {
                 foreach (string line in lines) {
                     List<int> row = new();
                     foreach (var s in line.Split(" "))
-                        row.Add(int.Parse(s));
+                        try {
+                            row.Add(int.Parse(s));
+                        } catch {
+
+                        }
                     tileData.Add(row);
                 }
                 if (tileData.Count > 0)

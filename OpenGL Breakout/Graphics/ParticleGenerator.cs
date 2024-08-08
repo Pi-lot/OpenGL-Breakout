@@ -63,7 +63,7 @@ namespace OpenGL_Breakout.Graphics {
             Random r = new Random();
             float random = (r.Next(100) - 50) / 10.0f;
             float rColour = 0.5f + (r.Next(100) / 100.0f);
-            particle.Position = GameObject.Position + random + offset;
+            particle.Position = gameObject.Position + new Vector2(random) + offset;
             particle.Colour = new Color4(rColour, rColour, rColour, 1.0f);
             particle.Life = 1.0f;
             particle.Velocity = gameObject.Velocity * 0.1f;
