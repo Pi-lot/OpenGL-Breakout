@@ -44,8 +44,9 @@ namespace OpenGL_Breakout {
             if (closing)
                 return;
 
+            GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            breakout.Render();
+            breakout.Render((float)args.Time);
 
             SwapBuffers();
         }
@@ -56,7 +57,7 @@ namespace OpenGL_Breakout {
             if (e.Key == Keys.Escape)
                 Close();
             if ((int)e.Key >= 0 && (int)e.Key < 1024) {
-                breakout.Keys[(int)e.Key] = true;
+                breakout.keys[(int)e.Key] = true;
             }
         }
 
@@ -64,7 +65,7 @@ namespace OpenGL_Breakout {
             base.OnKeyUp(e);
 
             if ((int)e.Key >= 0 && (int)e.Key < 1024) {
-                breakout.Keys[(int)e.Key] = false;
+                breakout.keys[(int)e.Key] = false;
             }
         }
 
