@@ -47,16 +47,16 @@ namespace OpenGL_Breakout {
                 ErrorCode error = GL.GetError();
                 if (error != ErrorCode.NoError) {
                     Console.WriteLine("OpenGL Error: {0}", error);
-                    //switch (error) {
-                    //    case ErrorCode.InvalidOperation:
-                    //        throw new InvalidOperationException(msg);
-                    //    case ErrorCode.OutOfMemory:
-                    //        throw new OutOfMemoryException(msg);
-                    //    case ErrorCode.InvalidValue:
-                    //        throw new ArgumentException(msg);
-                    //    default:
-                    //        throw new Exception(msg);
-                    //}
+                    switch (error) {
+                        case ErrorCode.InvalidOperation:
+                            throw new InvalidOperationException(msg);
+                        case ErrorCode.OutOfMemory:
+                            throw new OutOfMemoryException(msg);
+                        case ErrorCode.InvalidValue:
+                            throw new ArgumentException(msg);
+                        default:
+                            throw new Exception(msg);
+                    }
                 }
             }
         }
