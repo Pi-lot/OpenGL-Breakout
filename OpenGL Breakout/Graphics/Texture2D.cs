@@ -1,7 +1,9 @@
 ﻿using OpenTK.Graphics.OpenGL;
 
-namespace OpenGL_Breakout {
-    internal class Texture2D : IDisposable{
+namespace OpenGL_Breakout.Graphics
+{
+    internal class Texture2D : IDisposable
+    {
         private bool disposedValue = false;
         public int ID { get; set; }
         public int Width { get; set; }
@@ -13,7 +15,8 @@ namespace OpenGL_Breakout {
         public TextureMinFilter Filter_Min { get; set; }
         public TextureMagFilter Filter_Max { get; set; }
 
-        public Texture2D() {
+        public Texture2D()
+        {
             Width = 0;
             Height = 0;
             Internal_Format = PixelInternalFormat.Rgb;
@@ -26,7 +29,8 @@ namespace OpenGL_Breakout {
             ID = GL.GenTexture();
         }
 
-        public void Generate(int width, int height, byte[] data) {
+        public void Generate(int width, int height, byte[] data)
+        {
             Width = width;
             Height = height;
 
@@ -42,15 +46,21 @@ namespace OpenGL_Breakout {
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
-        public void Bind() {
+        public void Bind()
+        {
             GL.BindTexture(TextureTarget.Texture2D, ID);
         }
 
-        public virtual void Dispose(bool disposing) {
-            if (!disposedValue) {
-                try {
+        public virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                try
+                {
                     GL.DeleteTexture(ID);
-                }catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Console.WriteLine("Error Deleting Texture: " + e.Message);
                 }
 
@@ -58,7 +68,8 @@ namespace OpenGL_Breakout {
             }
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }

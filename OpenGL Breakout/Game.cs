@@ -1,16 +1,35 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using OpenGL_Breakout.Enums;
+using OpenGL_Breakout.Graphics;
+using OpenGL_Breakout.Resources;
+using OpenGL_Breakout.Objects;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Reflection.Metadata;
 
 namespace OpenGL_Breakout {
+    
+
     internal class Game {
         public GameState State { get; private set; }
         public bool[] Keys { get; set; } = new bool[1024];
 
         public int Width, Height;
+
+        public List<GameLevel> Levels;
+        public List<PowerUp> PowerUps;
+        public int Level;
+
+        Vector2 PLAYER_SIZE = new(100.0f, 20.0f);
+        float PLAYER_VELOCITY = 500.0f;
+
+        Vector2 INITIAL_BALL_VELOCITY = new(100.0f, -350.0f);
+        float BALL_RADIUS = 12.65f;
+
+        Collision collision;
 
         SpriteRenderer spriteRenderer;
 
@@ -68,6 +87,26 @@ namespace OpenGL_Breakout {
 
         public void Render() {
             spriteRenderer.DrawSprite(ResourceManager.GetTexture("face"), new Vector2(200.0f, 200.0f), new Vector2(300.0f, 400.0f), 45.0f, new Vector3(0.0f, 1.0f, 0.0f));
+        }
+
+        public void DoCollisions() {
+
+        }
+
+        public void ResetLevel() {
+
+        }
+
+        public void ResetPlayer() {
+
+        }
+
+        public void SpawnPowerUps(GameObject block) {
+
+        }
+
+        public void UpdatePowerUps(float dt) {
+
         }
 
         public void Close(CancelEventArgs e) {

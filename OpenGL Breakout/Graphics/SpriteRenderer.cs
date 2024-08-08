@@ -1,18 +1,23 @@
 ﻿using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL;
+using OpenGL_Breakout.Resources;
 
-namespace OpenGL_Breakout {
-    internal class SpriteRenderer : IDisposable {
+namespace OpenGL_Breakout.Graphics
+{
+    internal class SpriteRenderer : IDisposable
+    {
         private bool disposedValue;
         private Shader shader;
         private int quadVAO, VBO;
 
-        public SpriteRenderer(Shader shader) {
+        public SpriteRenderer(Shader shader)
+        {
             this.shader = shader;
             initRenderData();
         }
 
-        public void DrawSprite(Texture2D texture, Vector2 position, Vector2 size, float rotate, Vector3 colour) {
+        public void DrawSprite(Texture2D texture, Vector2 position, Vector2 size, float rotate, Vector3 colour)
+        {
             shader.Use();
             Matrix4 model = Matrix4.Identity;
             model *= Matrix4.CreateTranslation(new Vector3(position));
@@ -34,7 +39,8 @@ namespace OpenGL_Breakout {
             //GL.BindVertexArray(0);
         }
 
-        private void initRenderData() {
+        private void initRenderData()
+        {
             float[] vertices = { 
                 // pos      // tex
                 0.0f, 1.0f, 0.0f, 1.0f,
@@ -59,17 +65,25 @@ namespace OpenGL_Breakout {
             //GL.BindVertexArray(0);
         }
 
-        public virtual void Dispose(bool disposing) {
-            if (!disposedValue) {
-                try {
+        public virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                try
+                {
                     GL.DeleteVertexArray(quadVAO);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Console.WriteLine("Error Deleting Sprite Renderer VAO: " + e.Message);
                 }
 
-                try {
+                try
+                {
                     GL.DeleteVertexArray(VBO);
-                } catch (Exception e) {
+                }
+                catch (Exception e)
+                {
                     Console.WriteLine("Error Deleting Sprite Renderer VBO: " + e.Message);
                 }
 
@@ -77,7 +91,8 @@ namespace OpenGL_Breakout {
             }
         }
 
-        public void Dispose() {
+        public void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }

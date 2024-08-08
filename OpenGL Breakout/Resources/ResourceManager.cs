@@ -1,12 +1,16 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using OpenGL_Breakout.Graphics;
+using OpenTK.Graphics.OpenGL;
 using StbImageSharp;
 
-namespace OpenGL_Breakout {
-    internal static class ResourceManager {
+namespace OpenGL_Breakout.Resources
+{
+    internal static class ResourceManager
+    {
         public static Dictionary<string, Shader> Shaders = new();
         public static Dictionary<string, Texture2D> Textures = new();
 
-        public static Shader LoadShader(string vShaderFile, string fShaderFile, string? gShaderFile, string name) {
+        public static Shader LoadShader(string vShaderFile, string fShaderFile, string? gShaderFile, string name)
+        {
             if (Shaders.ContainsKey(name))
                 Shaders[name] = LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
             else
@@ -14,11 +18,13 @@ namespace OpenGL_Breakout {
             return Shaders[name];
         }
 
-        public static Shader GetShader(string name) {
+        public static Shader GetShader(string name)
+        {
             return Shaders[name];
         }
 
-        public static Texture2D LoadTexture(string file, bool alpha, string name) {
+        public static Texture2D LoadTexture(string file, bool alpha, string name)
+        {
             if (Textures.ContainsKey(name))
                 Textures[name] = LoadTextureFromFile(file, alpha);
             else
@@ -26,11 +32,13 @@ namespace OpenGL_Breakout {
             return Textures[name];
         }
 
-        public static Texture2D GetTexture(string name) {
+        public static Texture2D GetTexture(string name)
+        {
             return Textures[name];
         }
 
-        public static void Clear() {
+        public static void Clear()
+        {
             foreach (var shader in Shaders.Values)
                 shader.Dispose();
             foreach (var texture in Textures.Values)
@@ -39,16 +47,20 @@ namespace OpenGL_Breakout {
             Textures.Clear();
         }
 
-        private static Shader LoadShaderFromFile(string vShaderFile, string fShaderFile, string? gShaderFile = null) {
+        private static Shader LoadShaderFromFile(string vShaderFile, string fShaderFile, string? gShaderFile = null)
+        {
             string vertexCode = string.Empty, fragmentCode = string.Empty;
             string? geometryCode = null;
 
-            try {
+            try
+            {
                 vertexCode = File.ReadAllText(vShaderFile);
                 fragmentCode = File.ReadAllText(fShaderFile);
                 if (gShaderFile != null)
                     geometryCode = File.ReadAllText(gShaderFile);
-            } catch {
+            }
+            catch
+            {
                 Console.WriteLine("ERROR: Failed to read shader files");
             }
 
@@ -57,15 +69,18 @@ namespace OpenGL_Breakout {
             return shader;
         }
 
-        private static Texture2D LoadTextureFromFile(string file, bool alpha) {
+        private static Texture2D LoadTextureFromFile(string file, bool alpha)
+        {
             Texture2D texture = new();
             ColorComponents colourComponents;
 
-            if (alpha) {
+            if (alpha)
+            {
                 texture.Image_Format = PixelFormat.Rgba;
                 texture.Internal_Format = PixelInternalFormat.Rgba;
                 colourComponents = ColorComponents.RedGreenBlueAlpha;
-            } else
+            }
+            else
                 colourComponents = ColorComponents.RedGreenBlue;
 
             StbImage.stbi_set_flip_vertically_on_load(1);
