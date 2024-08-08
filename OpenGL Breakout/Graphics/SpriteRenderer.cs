@@ -1,5 +1,5 @@
 ﻿using OpenTK.Mathematics;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using OpenGL_Breakout.Resources;
 
 namespace OpenGL_Breakout.Graphics {
@@ -17,7 +17,7 @@ namespace OpenGL_Breakout.Graphics {
             shader.Use();
             Matrix4 model = Matrix4.Identity;
             model *= Matrix4.CreateTranslation(new Vector3(position));
-
+            
             model *= Matrix4.CreateTranslation(new Vector3(0.5f * size.X, 0.5f * size.Y, 0.0f));
             model *= Matrix4.CreateRotationZ(rotate);
             model *= Matrix4.CreateTranslation(new Vector3(-0.5f * size.X, -0.5f * size.Y, 0.0f));
@@ -32,7 +32,7 @@ namespace OpenGL_Breakout.Graphics {
 
             GL.BindVertexArray(quadVAO);
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
-            //GL.BindVertexArray(0);
+            GL.BindVertexArray(0);
         }
 
         private void initRenderData() {
@@ -58,7 +58,7 @@ namespace OpenGL_Breakout.Graphics {
             GL.EnableVertexAttribArray(0);
             GL.VertexAttribPointer(0, 4, VertexAttribPointerType.Float, false, 4 * sizeof(float), 0);
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
-            //GL.BindVertexArray(0);
+            GL.BindVertexArray(0);
         }
 
         public virtual void Dispose(bool disposing) {
