@@ -6,9 +6,11 @@ namespace OpenGL_Breakout {
         public static Dictionary<string, Shader> Shaders = new();
         public static Dictionary<string, Texture2D> Textures = new();
 
-        public static Shader LoadShader(string vShaderFile, string fShaderFile, string gShaderFile, string name) {
-            Shaders[name] = LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
-            Shaders.Add(name, LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile));
+        public static Shader LoadShader(string vShaderFile, string fShaderFile, string? gShaderFile, string name) {
+            if (Shaders.ContainsKey(name))
+                Shaders[name] = LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+            else
+                Shaders.Add(name, LoadShaderFromFile(vShaderFile, fShaderFile, gShaderFile));
             return Shaders[name];
         }
 
@@ -17,7 +19,10 @@ namespace OpenGL_Breakout {
         }
 
         public static Texture2D LoadTexture(string file, bool alpha, string name) {
-            Textures[name] = LoadTextureFromFile(file, alpha);
+            if (Textures.ContainsKey(name))
+                Textures[name] = LoadTextureFromFile(file, alpha);
+            else
+                Textures.Add(name, LoadTextureFromFile(file, alpha));
             return Textures[name];
         }
 
@@ -27,9 +32,11 @@ namespace OpenGL_Breakout {
 
         public static void Clear() {
             foreach (var shader in Shaders.Values)
-                GL.DeleteProgram(shader.ID);
+                shader.Dispose();
             foreach (var texture in Textures.Values)
-                GL.DeleteTexture(texture.ID);
+                texture.Dispose();
+            Shaders.Clear();
+            Textures.Clear();
         }
 
         private static Shader LoadShaderFromFile(string vShaderFile, string fShaderFile, string? gShaderFile = null) {
@@ -41,7 +48,7 @@ namespace OpenGL_Breakout {
                 fragmentCode = File.ReadAllText(fShaderFile);
                 if (gShaderFile != null)
                     geometryCode = File.ReadAllText(gShaderFile);
-            } catch (Exception e) {
+            } catch {
                 Console.WriteLine("ERROR: Failed to read shader files");
             }
 
@@ -58,7 +65,7 @@ namespace OpenGL_Breakout {
                 texture.Image_Format = PixelFormat.Rgba;
                 texture.Internal_Format = PixelInternalFormat.Rgba;
                 colourComponents = ColorComponents.RedGreenBlueAlpha;
-            } else 
+            } else
                 colourComponents = ColorComponents.RedGreenBlue;
 
             StbImage.stbi_set_flip_vertically_on_load(1);

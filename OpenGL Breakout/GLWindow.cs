@@ -8,6 +8,8 @@ namespace OpenGL_Breakout {
     internal class GLWindow : GameWindow {
         Game breakout;
 
+        bool closing = false;
+
         public GLWindow(int width, int height, string title) :
             base(GameWindowSettings.Default, new NativeWindowSettings() {
                 Size = (width, height),
@@ -24,6 +26,7 @@ namespace OpenGL_Breakout {
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             breakout.Init();
         }
 
@@ -38,7 +41,9 @@ namespace OpenGL_Breakout {
         protected override void OnRenderFrame(FrameEventArgs args) {
             base.OnRenderFrame(args);
 
-            GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            if (closing)
+                return;
+
             GL.Clear(ClearBufferMask.ColorBufferBit);
             breakout.Render();
 
@@ -66,13 +71,16 @@ namespace OpenGL_Breakout {
         protected override void OnResize(ResizeEventArgs e) {
             base.OnResize(e);
 
+            breakout.Width = Size.X;
+            breakout.Height = Size.Y;
+
             GL.Viewport(0, 0, Size.X, Size.Y);
         }
 
         protected override void OnClosing(CancelEventArgs e) {
             base.OnClosing(e);
-
-            ResourceManager.Clear();
+            closing = true;
+            breakout.Close(e);
         }
     }
 }

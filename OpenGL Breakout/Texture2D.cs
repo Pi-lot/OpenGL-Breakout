@@ -1,7 +1,8 @@
 ﻿using OpenTK.Graphics.OpenGL;
 
 namespace OpenGL_Breakout {
-    internal class Texture2D {
+    internal class Texture2D : IDisposable{
+        private bool disposedValue = false;
         public int ID { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
@@ -43,6 +44,23 @@ namespace OpenGL_Breakout {
 
         public void Bind() {
             GL.BindTexture(TextureTarget.Texture2D, ID);
+        }
+
+        public virtual void Dispose(bool disposing) {
+            if (!disposedValue) {
+                try {
+                    GL.DeleteTexture(ID);
+                }catch (Exception e) {
+                    Console.WriteLine("Error Deleting Texture: " + e.Message);
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose() {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

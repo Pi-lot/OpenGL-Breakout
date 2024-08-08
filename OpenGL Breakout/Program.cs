@@ -2,5 +2,5 @@
 using OpenGL_Breakout;
 
 Console.WriteLine("Hello, World!");
-using (GLWindow window = new (800,600, "Breakout"))
+using (GLWindow window = new(800, 600, "Breakout"))
     window.Run();
