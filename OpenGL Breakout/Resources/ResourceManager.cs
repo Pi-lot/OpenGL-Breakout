@@ -1,5 +1,5 @@
 ﻿using OpenGL_Breakout.Graphics;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using StbImageSharp;
 
 namespace OpenGL_Breakout.Resources

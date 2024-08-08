@@ -2,7 +2,7 @@
 using OpenGL_Breakout.Graphics;
 using OpenGL_Breakout.Resources;
 using OpenGL_Breakout.Objects;
-using OpenTK.Graphics.OpenGL;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -11,10 +11,7 @@ using System.Runtime.InteropServices;
 using System.Reflection.Metadata;
 using OpenGL_Breakout.Structs;
 
-namespace OpenGL_Breakout
-{
-
-
+namespace OpenGL_Breakout {
     internal class Game {
         public GameState State { get; private set; }
         public bool[] Keys { get; set; } = new bool[1024];
@@ -50,8 +47,6 @@ namespace OpenGL_Breakout
                             throw new OutOfMemoryException(msg);
                         case ErrorCode.InvalidValue:
                             throw new ArgumentException(msg);
-                        case ErrorCode.StackOverflow:
-                            throw new StackOverflowException(msg);
                         default:
                             throw new Exception(msg);
                     }
