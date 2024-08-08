@@ -2,9 +2,9 @@
 
 namespace OpenGL_Breakout.Structs {
     internal struct Particle {
-        Vector2 Position, Velocity;
-        Vector4 Colour;
-        float Life;
+        public Vector2 Position, Velocity;
+        public Vector4 Colour;
+        public float Life;
 
         public Particle() {
             Position = Vector2.Zero;
