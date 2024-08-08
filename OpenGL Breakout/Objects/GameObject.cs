@@ -21,7 +21,7 @@ namespace OpenGL_Breakout.Objects {
             Destroyed = false;
         }
 
-        public GameObject(Vector2 pos, Vector2 size, Texture2D sprite, Vector3 colour = new(), Vector2 velocity = new()) {
+        public GameObject(Vector2 pos, Vector2 size, Texture2D sprite, Vector3 colour, Vector2 velocity = new()) {
             Position = pos;
             Size = size;
             Velocity = velocity;

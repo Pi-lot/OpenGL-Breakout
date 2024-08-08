@@ -5,14 +5,10 @@ using OpenGL_Breakout.Objects;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Reflection.Metadata;
 using OpenGL_Breakout.Structs;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using ErrorCode = OpenTK.Graphics.OpenGL4.ErrorCode;
-using System.Diagnostics.CodeAnalysis;
 
 namespace OpenGL_Breakout {
     internal class Game {
@@ -75,7 +71,7 @@ namespace OpenGL_Breakout {
             ResourceManager.LoadShader("Shaders/particle.vert", "Shaders/particle.frag", null, "particle");
             ResourceManager.LoadShader("Shaders/post_process.vert", "Shaders/post_process.frag", null, "postprocessing");
 
-            Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0.0f, Width, Height, 0.0f, -1.0f, 1.0f);
+            Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0.0f, (float)Width, (float)Height, 0.0f, -1.0f, 1.0f);
 
             ResourceManager.GetShader("sprite").SetInteger("image", 0, true);
             ResourceManager.GetShader("sprite").SetMatrix4("projection", projection);
@@ -114,7 +110,7 @@ namespace OpenGL_Breakout {
             Level = 0;
 
             Vector2 playerPos = new(Width / 2.0f - PLAYER_SIZE.X / 2.0f, Height - PLAYER_SIZE.Y);
-            Player = new(playerPos, PLAYER_SIZE, ResourceManager.GetTexture("paddle"));
+            Player = new(playerPos, PLAYER_SIZE, ResourceManager.GetTexture("paddle"), Vector3.One);
 
             Vector2 ballPos = playerPos + new Vector2(PLAYER_SIZE.X / 2.0f - BALL_RADIUS, -BALL_RADIUS * 2.0f);
             Ball = new(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager.GetTexture("face"));

@@ -1,12 +1,20 @@
 ﻿using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.ComponentModel;
+using OpenGL_Breakout.Resources;
+
+using OpenGL_Breakout.Resources;
 
 namespace OpenGL_Breakout {
     internal class GLWindow : GameWindow {
         Game breakout;
+
+        float moveSpeed = 20.0f;
+        float horOff = 0.0f;
+        float verOff = 0.0f;
 
         bool closing = false;
 
@@ -35,12 +43,34 @@ namespace OpenGL_Breakout {
 
             breakout.ProcessInput((float)args.Time);
 
+            if (KeyboardState.IsKeyDown(Keys.Q)) {
+                horOff -= moveSpeed * (float)args.Time;
+            }
+            if (KeyboardState.IsKeyDown(Keys.E)) {
+                horOff += moveSpeed * (float)args.Time;
+            }
+            if (KeyboardState.IsKeyDown(Keys.W)) {
+                verOff -= moveSpeed * (float)args.Time;
+            }
+            if (KeyboardState.IsKeyDown(Keys.S)) {
+                verOff += moveSpeed * (float)args.Time;
+            }
+
+            Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0.0f + horOff, (float)Size.X + horOff, (float)Size.Y + verOff, 0.0f + verOff, -1.0f, 1.0f);
+
+            try {
+                ResourceManager.GetShader("sprite").SetMatrix4("projection", projection);
+                ResourceManager.GetShader("particle").SetMatrix4("projection", projection);
+            } catch {
+
+            }
+
             breakout.Update((float)args.Time);
         }
 
         protected override void OnRenderFrame(FrameEventArgs args) {
             base.OnRenderFrame(args);
-
+            
             if (closing)
                 return;
 

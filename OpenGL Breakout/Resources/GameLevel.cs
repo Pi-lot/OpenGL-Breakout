@@ -49,8 +49,9 @@ namespace OpenGL_Breakout.Resources {
                     foreach (var s in line.Split(" "))
                         try {
                             row.Add(int.Parse(s));
-                        } catch {
-
+                        } catch (FormatException fe) {
+                            Console.WriteLine(fe.Message);
+                            Console.WriteLine("|{0}|", s);
                         }
                     tileData.Add(row);
                 }
