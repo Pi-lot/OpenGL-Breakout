@@ -9,9 +9,11 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Reflection.Metadata;
+using OpenGL_Breakout.Structs;
 
-namespace OpenGL_Breakout {
-    
+namespace OpenGL_Breakout
+{
+
 
     internal class Game {
         public GameState State { get; private set; }
@@ -78,10 +80,12 @@ namespace OpenGL_Breakout {
         }
 
         public void ProcessInput(float dt) {
+            throw new NotImplementedException();
 
         }
 
         public void Update(float dt) {
+            throw new NotImplementedException();
 
         }
 
@@ -90,22 +94,27 @@ namespace OpenGL_Breakout {
         }
 
         public void DoCollisions() {
+            throw new NotImplementedException();
 
         }
 
         public void ResetLevel() {
+            throw new NotImplementedException();
 
         }
 
         public void ResetPlayer() {
+            throw new NotImplementedException();
 
         }
 
         public void SpawnPowerUps(GameObject block) {
+            throw new NotImplementedException();
 
         }
 
         public void UpdatePowerUps(float dt) {
+            throw new NotImplementedException();
 
         }
 
