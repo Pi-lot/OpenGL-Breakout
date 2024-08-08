@@ -43,28 +43,6 @@ namespace OpenGL_Breakout {
 
             breakout.ProcessInput((float)args.Time);
 
-            if (KeyboardState.IsKeyDown(Keys.Q)) {
-                horOff -= moveSpeed * (float)args.Time;
-            }
-            if (KeyboardState.IsKeyDown(Keys.E)) {
-                horOff += moveSpeed * (float)args.Time;
-            }
-            if (KeyboardState.IsKeyDown(Keys.W)) {
-                verOff -= moveSpeed * (float)args.Time;
-            }
-            if (KeyboardState.IsKeyDown(Keys.S)) {
-                verOff += moveSpeed * (float)args.Time;
-            }
-
-            Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0.0f + horOff, (float)Size.X + horOff, (float)Size.Y + verOff, 0.0f + verOff, -1.0f, 1.0f);
-
-            try {
-                ResourceManager.GetShader("sprite").SetMatrix4("projection", projection);
-                ResourceManager.GetShader("particle").SetMatrix4("projection", projection);
-            } catch {
-
-            }
-
             breakout.Update((float)args.Time);
         }
 
