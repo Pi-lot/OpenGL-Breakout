@@ -4,6 +4,7 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.ComponentModel;
 using OpenGL_Breakout.Resources;
+using System.Diagnostics;
 
 namespace OpenGL_Breakout {
     internal class GLWindow : GameWindow {
@@ -12,6 +13,8 @@ namespace OpenGL_Breakout {
         float moveSpeed = 20.0f;
         float horOff = 0.0f;
         float verOff = 0.0f;
+
+        Stopwatch runTime = new();
 
         bool closing = false;
 
@@ -33,13 +36,15 @@ namespace OpenGL_Breakout {
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             breakout.Init();
+
+            runTime.Start();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args) {
             base.OnUpdateFrame(args);
 
             breakout.ProcessInput((float)args.Time);
-
+            
             breakout.Update((float)args.Time);
         }
 
@@ -51,7 +56,7 @@ namespace OpenGL_Breakout {
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            breakout.Render((float)args.Time);
+            breakout.Render(((float)runTime.Elapsed.TotalSeconds));
 
             SwapBuffers();
         }

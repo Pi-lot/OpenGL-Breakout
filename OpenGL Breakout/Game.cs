@@ -173,7 +173,7 @@ namespace OpenGL_Breakout {
             }
         }
 
-        public void Render(float dt) {
+        public void Render(float time) {
             if (State == GameState.GAME_ACTIVE) {
                 Effects.BeginRender();
                 Renderer.DrawSprite(ResourceManager.GetTexture("background"),
@@ -190,7 +190,7 @@ namespace OpenGL_Breakout {
                 Ball.Draw(Renderer);
 
                 Effects.EndRender();
-                Effects.Render(dt);
+                Effects.Render(time);
             }
         }
 
