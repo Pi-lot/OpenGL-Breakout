@@ -14,12 +14,15 @@ namespace OpenGL_Breakout {
     internal class Game {
         public GameState State { get; private set; }
         public bool[] keys { get; set; } = new bool[1024];
+        public bool[] keysProcessed { get; set; } = new bool[1024];
 
         public int Width, Height;
 
         public List<GameLevel> Levels = new();
         public List<PowerUp> PowerUps = new();
         public int Level;
+
+        public int Lives;
 
         static Vector2 PLAYER_SIZE = new(100.0f, 20.0f);
         static float PLAYER_VELOCITY = 500.0f;
@@ -69,9 +72,11 @@ namespace OpenGL_Breakout {
         }
 
         public Game(int width, int height) {
-            State = GameState.GAME_ACTIVE;
+            State = GameState.GAME_MENU;
             Width = width;
             Height = height;
+            Level = 0;
+            Lives = 3;
 
             GL.Enable(EnableCap.DebugOutput);
             GL.Enable(EnableCap.DebugOutputSynchronous);
@@ -131,6 +136,24 @@ namespace OpenGL_Breakout {
         }
 
         public void ProcessInput(float dt) {
+            if (State == GameState.GAME_MENU) {
+                if (keys[(int)Keys.Enter] && !keysProcessed[(int)Keys.Enter]) {
+                    State = GameState.GAME_ACTIVE;
+                    keysProcessed[(int)Keys.Enter] = true;
+                }
+                if (keys[(int)Keys.W] && !keysProcessed[(int)Keys.W]) {
+                    Level = (Level + 1) % 4;
+                    keysProcessed[(int)Keys.W] = true;
+                }
+                if (keys[(int)Keys.S] && !keysProcessed[(int)Keys.S]) {
+                    if (Level > 0)
+                        Level--;
+                    else
+                        Level = 3;
+                    keysProcessed[(int)Keys.S] = true;
+                }
+            }
+
             if (State == GameState.GAME_ACTIVE) {
                 float velocity = PLAYER_VELOCITY * dt;
                 if (keys[(int)Keys.A]) {
@@ -151,6 +174,13 @@ namespace OpenGL_Breakout {
                     Ball.Stuck = false;
             }
 
+            if (State == GameState.GAME_WIN) {
+                if (keys[(int)Keys.Enter]) {
+                    keysProcessed[(int)Keys.Enter] = true;
+                    Effects.Chaos = false;
+                    State = GameState.GAME_MENU;
+                }
+            }
         }
 
         public void Update(float dt) {
@@ -162,7 +192,17 @@ namespace OpenGL_Breakout {
             UpdatePowerUps(dt);
 
             if (Ball.Position.Y >= Height) {
-                ResetLevel();
+                Lives--;
+                
+                Console.WriteLine("Lives Left: {0}", Lives);
+
+                if (Lives == 0) {
+                    Console.WriteLine("Out of Lives. Return to Game Menu");
+
+                    ResetLevel();
+                    State = GameState.GAME_MENU;
+                }
+
                 ResetPlayer();
             }
 
@@ -171,10 +211,20 @@ namespace OpenGL_Breakout {
                 if (ShakeTime <= 0.0f)
                     Effects.Shake = false;
             }
+
+            if (State == GameState.GAME_ACTIVE && Levels[Level].IsCompleted()) {
+                ResetLevel();
+                ResetPlayer();
+                Effects.Chaos = true;
+                State = GameState.GAME_WIN;
+
+                Console.WriteLine("You WON!!!!");
+                Console.WriteLine("Press ENTER to retry or ESC to quit");
+            }
         }
 
         public void Render(float time) {
-            if (State == GameState.GAME_ACTIVE) {
+            if (State == GameState.GAME_ACTIVE || State == GameState.GAME_MENU || State == GameState.GAME_WIN) {
                 Effects.BeginRender();
                 Renderer.DrawSprite(ResourceManager.GetTexture("background"),
                     Vector2.Zero, new Vector2(Width, Height), 0.0f, Vector3.One);
@@ -191,6 +241,14 @@ namespace OpenGL_Breakout {
 
                 Effects.EndRender();
                 Effects.Render(time);
+            }
+
+            if (State == GameState.GAME_MENU) {
+                // Render Menu Text (Not Implemented)
+            }
+
+            if (State == GameState.GAME_WIN) {
+                // Render Win Text (Not Implemented)
             }
         }
 
@@ -340,6 +398,8 @@ namespace OpenGL_Breakout {
                 Levels[2].Load("Levels/three.lvl", Width, Height / 2);
             else if (Level == 3)
                 Levels[3].Load("Levels/four.lvl", Width, Height / 2);
+
+            Lives = 3;
         }
 
         public void ResetPlayer() {

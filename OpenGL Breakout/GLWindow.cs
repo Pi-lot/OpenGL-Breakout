@@ -3,7 +3,6 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.ComponentModel;
-using OpenGL_Breakout.Resources;
 using System.Diagnostics;
 
 namespace OpenGL_Breakout {
@@ -38,6 +37,9 @@ namespace OpenGL_Breakout {
             breakout.Init();
 
             runTime.Start();
+
+            Console.WriteLine("Press ENTER to Start");
+            Console.WriteLine("Press W or S to select level");
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args) {
@@ -76,6 +78,7 @@ namespace OpenGL_Breakout {
 
             if ((int)e.Key >= 0 && (int)e.Key < 1024) {
                 breakout.keys[(int)e.Key] = false;
+                breakout.keysProcessed[(int)e.Key] = false;
             }
         }
 
