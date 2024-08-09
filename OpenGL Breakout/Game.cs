@@ -3,7 +3,7 @@ using OpenGL_Breakout.Graphics;
 using OpenGL_Breakout.Resources;
 using OpenGL_Breakout.Objects;
 using OpenTK.Graphics.OpenGL4;
-using OpenTK.Mathematics;
+using System.Numerics;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using OpenGL_Breakout.Structs;
@@ -38,6 +38,15 @@ namespace OpenGL_Breakout {
         private void DebugCallback(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam) {
             string msg = Marshal.PtrToStringAnsi(message, length);
             Console.WriteLine("OpenGL Debug: {0} | {1}", msg, type);
+            Console.WriteLine(source);
+            if (source == DebugSource.DebugSourceApi) {
+                
+            }
+            string? usrParam = Marshal.PtrToStringAnsi(userParam);
+            if (usrParam != null)
+                Console.WriteLine("UserParam: {0}", usrParam);
+            else
+                Console.WriteLine("UserParam NULL");
 
             if (type == DebugType.DebugTypeError) {
                 ErrorCode error = GL.GetError();
@@ -63,7 +72,8 @@ namespace OpenGL_Breakout {
             Height = height;
 
             GL.Enable(EnableCap.DebugOutput);
-            //GL.DebugMessageCallback(DebugCallback, IntPtr.Zero);
+            GL.Enable(EnableCap.DebugOutputSynchronous);
+            GL.DebugMessageCallback(DebugCallback, IntPtr.Zero);
         }
 
         public void Init() {
@@ -71,12 +81,12 @@ namespace OpenGL_Breakout {
             ResourceManager.LoadShader("Shaders/particle.vert", "Shaders/particle.frag", null, "particle");
             ResourceManager.LoadShader("Shaders/post_process.vert", "Shaders/post_process.frag", null, "postprocessing");
 
-            Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0.0f, (float)Width, (float)Height, 0.0f, -1.0f, 1.0f);
+            Matrix4x4 projection = Matrix4x4.CreateOrthographicOffCenter(0.0f, (float)Width, (float)Height, 0.0f, -1.0f, 1.0f);
 
             ResourceManager.GetShader("sprite").SetInteger("image", 0, true);
-            ResourceManager.GetShader("sprite").SetMatrix4("projection", projection);
+            ResourceManager.GetShader("sprite").SetMatrix4x4("projection", projection);
             ResourceManager.GetShader("particle").SetInteger("image", 0, true);
-            ResourceManager.GetShader("particle").SetMatrix4("projection", projection);
+            ResourceManager.GetShader("particle").SetMatrix4x4("projection", projection);
 
             Renderer = new(ResourceManager.GetShader("sprite"));
             Effects = new(ResourceManager.GetShader("postprocessing"), Width, Height);
@@ -149,7 +159,7 @@ namespace OpenGL_Breakout {
 
             UpdatePowerUps(dt);
 
-            if (Ball.Position.X >= Height) {
+            if (Ball.Position.Y >= Height) {
                 ResetLevel();
                 ResetPlayer();
             }
@@ -199,7 +209,7 @@ namespace OpenGL_Breakout {
             int best_match = -1;
 
             for (int i = 0; i < 4; i++) {
-                float dot_product = Vector2.Dot(target.Normalized(), compass[i]);
+                float dot_product = Vector2.Dot(Vector2.Normalize(target), compass[i]);
                 if (dot_product > max) {
                     max = dot_product;
                     best_match = i;
@@ -248,7 +258,7 @@ namespace OpenGL_Breakout {
             Vector2 clamped = Vector2.Clamp(difference, -aabbHalfExtents, aabbHalfExtents);
             Vector2 closest = aabbCentre + clamped;
             difference = closest - centre;
-            if (difference.Length < one.Radius)
+            if (difference.Length() < one.Radius)
                 return new Collision(true, VectorDirection(difference), difference);
             else
                 return new Collision(false, Direction.UP, Vector2.Zero);
@@ -301,7 +311,7 @@ namespace OpenGL_Breakout {
                 float strength = 2.0f;
                 Vector2 oldVelocity = Ball.Velocity;
                 Ball.Velocity.X = INITIAL_BALL_VELOCITY.X * percentage * strength;
-                Ball.Velocity = Ball.Velocity.Normalized() * oldVelocity.Length;
+                Ball.Velocity = Vector2.Normalize(Ball.Velocity) * oldVelocity.Length();
                 Ball.Velocity.Y = -1.0f * Math.Abs(Ball.Velocity.Y);
                 Ball.Stuck = Ball.Sticky;
             }
@@ -416,9 +426,7 @@ namespace OpenGL_Breakout {
                 }
             }
 
-            foreach (PowerUp powerUp in PowerUps)
-                if (powerUp.Destroyed && !powerUp.Activated)
-                    PowerUps.Remove(powerUp);
+            PowerUps.RemoveAll(powerUp => powerUp.Destroyed && !powerUp.Activated);
         }
 
         public void Close(CancelEventArgs e) {

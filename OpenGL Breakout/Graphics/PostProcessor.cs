@@ -90,14 +90,14 @@ namespace OpenGL_Breakout.Graphics {
                 -1,  8, -1,
                 -1, -1, -1
             ];
-            GL.Uniform2(GL.GetUniformLocation(PostProcessingShader.ID, "edge_kernel"), 9, edge_kernel);
+            GL.Uniform1(GL.GetUniformLocation(PostProcessingShader.ID, "edge_kernel"), 9, edge_kernel);
 
             float[] blur_kernel = [
                 1.0f / 16.0f, 2.0f / 16.0f, 1.0f / 16.0f,
                 2.0f / 16.0f, 4.0f / 16.0f, 2.0f / 16.0f,
                 1.0f / 16.0f, 2.0f / 16.0f, 1.0f / 16.0f
             ];
-            GL.Uniform2(GL.GetUniformLocation(PostProcessingShader.ID, "blur_kernel"), 9, blur_kernel);
+            GL.Uniform1(GL.GetUniformLocation(PostProcessingShader.ID, "blur_kernel"), 9, blur_kernel);
         }
 
         public void BeginRender() {

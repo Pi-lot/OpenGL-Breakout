@@ -1,11 +1,8 @@
 ﻿using OpenTK.Graphics.OpenGL4;
-using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.ComponentModel;
-using OpenGL_Breakout.Resources;
-
 using OpenGL_Breakout.Resources;
 
 namespace OpenGL_Breakout {
@@ -20,17 +17,17 @@ namespace OpenGL_Breakout {
 
         public GLWindow(int width, int height, string title) :
             base(GameWindowSettings.Default, new NativeWindowSettings() {
-                Size = (width, height),
+                ClientSize = (width, height),
                 Title = title,
                 Vsync = VSyncMode.Off
             }) {
-            breakout = new(Size.X, Size.Y);
+            breakout = new(ClientSize.X, ClientSize.Y);
         }
 
         protected override void OnLoad() {
             base.OnLoad();
 
-            GL.Viewport(0,0, Size.X, Size.Y);
+            GL.Viewport(0,0, ClientSize.X, ClientSize.Y);
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
@@ -80,10 +77,10 @@ namespace OpenGL_Breakout {
         protected override void OnResize(ResizeEventArgs e) {
             base.OnResize(e);
 
-            breakout.Width = Size.X;
-            breakout.Height = Size.Y;
+            breakout.Width = ClientSize.X;
+            breakout.Height = ClientSize.Y;
 
-            GL.Viewport(0, 0, Size.X, Size.Y);
+            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
         }
 
         protected override void OnClosing(CancelEventArgs e) {

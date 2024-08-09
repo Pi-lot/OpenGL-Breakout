@@ -69,7 +69,10 @@ namespace OpenGL_Breakout.Resources {
             } else
                 colourComponents = ColorComponents.RedGreenBlue;
 
-            StbImage.stbi_set_flip_vertically_on_load(1);
+            //StbImage.stbi_set_flip_vertically_on_load(1);
+
+            if (!File.Exists(file))
+                throw new FileNotFoundException("File doesn't exist");
 
             using FileStream fileStream = File.OpenRead(file);
             ImageResult image = ImageResult.FromStream(fileStream, colourComponents);

@@ -1,5 +1,5 @@
 ﻿using OpenGL_Breakout.Graphics;
-using OpenTK.Mathematics;
+using System.Numerics;
 
 namespace OpenGL_Breakout.Objects {
     internal class BallObject : GameObject {

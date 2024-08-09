@@ -1,5 +1,5 @@
 ﻿using OpenGL_Breakout.Enums;
-using OpenTK.Mathematics;
+using System.Numerics;
 
 namespace OpenGL_Breakout.Structs {
     internal struct Collision {

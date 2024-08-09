@@ -1,4 +1,4 @@
-﻿using OpenTK.Mathematics;
+﻿using System.Numerics;
 using OpenTK.Graphics.OpenGL4;
 using OpenGL_Breakout.Resources;
 
@@ -15,16 +15,16 @@ namespace OpenGL_Breakout.Graphics {
 
         public void DrawSprite(Texture2D texture, Vector2 position, Vector2 size, float rotate, Vector3 colour) {
             shader.Use();
-            Matrix4 model = Matrix4.Identity;
-            model = Matrix4.CreateTranslation(new Vector3(position)) * model;
+            Matrix4x4 model = Matrix4x4.Identity;
+            model = Matrix4x4.CreateTranslation(new Vector3(position, 0.0f)) * model;
             
-            model = Matrix4.CreateTranslation(new Vector3(0.5f * size.X, 0.5f * size.Y, 0.0f)) * model;
-            model = Matrix4.CreateRotationZ(rotate) * model;
-            model = Matrix4.CreateTranslation(new Vector3(-0.5f * size.X, -0.5f * size.Y, 0.0f)) * model;
+            model = Matrix4x4.CreateTranslation(new Vector3(0.5f * size.X, 0.5f * size.Y, 0.0f)) * model;
+            model = Matrix4x4.CreateRotationZ(rotate) * model;
+            model = Matrix4x4.CreateTranslation(new Vector3(-0.5f * size.X, -0.5f * size.Y, 0.0f)) * model;
 
-            model = Matrix4.CreateScale(new Vector3(size)) * model;
+            model = Matrix4x4.CreateScale(new Vector3(size, 0.0f)) * model;
 
-            shader.SetMatrix4("model", model);
+            shader.SetMatrix4x4("model", model);
             shader.SetVector3("spriteColour", colour);
 
             GL.ActiveTexture(TextureUnit.Texture0);

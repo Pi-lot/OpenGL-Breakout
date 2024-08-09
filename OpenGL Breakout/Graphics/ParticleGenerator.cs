@@ -2,7 +2,7 @@
 using OpenGL_Breakout.Resources;
 using OpenGL_Breakout.Structs;
 using OpenTK.Graphics.OpenGL4;
-using OpenTK.Mathematics;
+using System.Numerics;
 
 namespace OpenGL_Breakout.Graphics {
     internal class ParticleGenerator {
@@ -64,7 +64,7 @@ namespace OpenGL_Breakout.Graphics {
             float random = (r.Next(100) - 50) / 10.0f;
             float rColour = 0.5f + (r.Next(100) / 100.0f);
             particle.Position = gameObject.Position + new Vector2(random) + offset;
-            particle.Colour = new Color4(rColour, rColour, rColour, 1.0f);
+            particle.Colour = new(rColour, rColour, rColour, 1.0f);
             particle.Life = 1.0f;
             particle.Velocity = gameObject.Velocity * 0.1f;
         }
@@ -88,7 +88,7 @@ namespace OpenGL_Breakout.Graphics {
                 p.Life -= dt;
                 if (p.Life <= 0.0f) {
                     p.Position -= p.Velocity * dt;
-                    p.Colour.A -= dt * 2.5f;
+                    p.Colour.W -= dt * 2.5f;
                 }
             }
         }
@@ -99,7 +99,7 @@ namespace OpenGL_Breakout.Graphics {
             foreach (Particle particle in particles) {
                 if (particle.Life > 0.0f) {
                     shader.SetVector2("offset", particle.Position);
-                    shader.SetVector4("colour", (OpenTK.Mathematics.Vector4)particle.Colour);
+                    shader.SetVector4("colour", particle.Colour);
                     texture.Bind();
 
                     GL.BindVertexArray(VAO);

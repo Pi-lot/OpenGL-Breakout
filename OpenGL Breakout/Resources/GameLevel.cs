@@ -1,6 +1,6 @@
 ﻿using OpenGL_Breakout.Graphics;
 using OpenGL_Breakout.Objects;
-using OpenTK.Mathematics;
+using System.Numerics;
 
 namespace OpenGL_Breakout.Resources {
     internal class GameLevel {
@@ -50,8 +50,7 @@ namespace OpenGL_Breakout.Resources {
                         try {
                             row.Add(int.Parse(s));
                         } catch (FormatException fe) {
-                            Console.WriteLine(fe.Message);
-                            Console.WriteLine("|{0}|", s);
+
                         }
                     tileData.Add(row);
                 }

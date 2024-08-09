@@ -1,4 +1,4 @@
-﻿using OpenTK.Mathematics;
+﻿using System.Numerics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace OpenGL_Breakout.Resources {
@@ -125,10 +125,12 @@ namespace OpenGL_Breakout.Resources {
         }
 
         public void SetVector2(string name, Vector2 value, bool useShader = false) {
+            float[] val = new float[2];
+            value.TryCopyTo(val);
             if (useShader)
                 Use();
             try {
-                GL.Uniform2(GL.GetUniformLocation(ID, name), value);
+                GL.Uniform2(GL.GetUniformLocation(ID, name), 1, val);
             } catch (Exception e) {
                 Console.WriteLine("Error Setting Vector2(Vector2): " + e.Message);
             }
@@ -145,10 +147,12 @@ namespace OpenGL_Breakout.Resources {
         }
 
         public void SetVector3(string name, Vector3 value, bool useShader = false) {
+            float[] val = new float[3];
+            value.TryCopyTo(val);
             if (useShader)
                 Use();
             try {
-                GL.Uniform3(GL.GetUniformLocation(ID, name), value);
+                GL.Uniform3(GL.GetUniformLocation(ID, name), 1, val);
             } catch (Exception e) {
                 Console.WriteLine("Error Setting Vector3(Vector3): " + e.Message);
             }
@@ -165,22 +169,28 @@ namespace OpenGL_Breakout.Resources {
         }
 
         public void SetVector4(string name, Vector4 value, bool useShader = false) {
+            float[] val = new float[4];
+            var success = value.TryCopyTo(val);
             if (useShader)
                 Use();
             try {
-                GL.Uniform4(GL.GetUniformLocation(ID, name), value);
+                GL.Uniform4(GL.GetUniformLocation(ID, name), 1, val);
             } catch (Exception e) {
                 Console.WriteLine("Error Setting Vector4(Vector4): " + e.Message);
             }
         }
 
-        public void SetMatrix4(string name, Matrix4 value, bool useShader = false) {
+        public void SetMatrix4x4(string name, Matrix4x4 value, bool useShader = false) {
+            float[] val = new float[4 * 4];
+            for (int i = 0; i < 4 * 4; i += 4)
+                for (int j = 0; j < 4; j++)
+                    val[i + j] = value[i / 4, j];
             if (useShader)
                 Use();
             try {
-                GL.UniformMatrix4(GL.GetUniformLocation(ID, name), false, ref value);
+                GL.UniformMatrix4(GL.GetUniformLocation(ID, name), 1, false, val);
             } catch (Exception e) {
-                Console.WriteLine("Error Setting Matrix4: " + e.Message);
+                Console.WriteLine("Error Setting Matrix4x4: " + e.Message);
             }
         }
 
