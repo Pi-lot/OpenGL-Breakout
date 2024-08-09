@@ -35,7 +35,9 @@ namespace OpenGL_Breakout {
 
         float ShakeTime = 0.0f;
 
-        private void DebugCallback(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam) {
+        GCHandle handle = GCHandle.Alloc(DebugCallback);
+
+        private static void DebugCallback(DebugSource source, DebugType type, int id, DebugSeverity severity, int length, IntPtr message, IntPtr userParam) {
             string msg = Marshal.PtrToStringAnsi(message, length);
             Console.WriteLine("OpenGL Debug: {0} | {1}", msg, type);
             Console.WriteLine(source);
@@ -433,6 +435,7 @@ namespace OpenGL_Breakout {
             ResourceManager.Clear();
 
             Renderer.Dispose();
+            handle.Free();
         }
     }
 }
