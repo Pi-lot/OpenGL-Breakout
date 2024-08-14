@@ -1,51 +1,64 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace OpenGL_Breakout {
     internal class GLWindow : GameWindow {
         Game breakout;
 
+        float moveSpeed = 20.0f;
+        float horOff = 0.0f;
+        float verOff = 0.0f;
+
+        Stopwatch runTime = new();
+
         bool closing = false;
 
         public GLWindow(int width, int height, string title) :
             base(GameWindowSettings.Default, new NativeWindowSettings() {
-                Size = (width, height),
+                ClientSize = (width, height),
                 Title = title,
                 Vsync = VSyncMode.Off
             }) {
-            breakout = new(Size.X, Size.Y);
+            breakout = new(ClientSize.X, ClientSize.Y);
         }
 
         protected override void OnLoad() {
             base.OnLoad();
 
-            GL.Viewport(0,0, Size.X, Size.Y);
+            GL.Viewport(0,0, ClientSize.X, ClientSize.Y);
 
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             breakout.Init();
+
+            runTime.Start();
+
+            Console.WriteLine("Press ENTER to Start");
+            Console.WriteLine("Press W or S to select level");
         }
 
         protected override void OnUpdateFrame(FrameEventArgs args) {
             base.OnUpdateFrame(args);
 
             breakout.ProcessInput((float)args.Time);
-
+            
             breakout.Update((float)args.Time);
         }
 
         protected override void OnRenderFrame(FrameEventArgs args) {
             base.OnRenderFrame(args);
-
+            
             if (closing)
                 return;
 
+            GL.ClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             GL.Clear(ClearBufferMask.ColorBufferBit);
-            breakout.Render();
+            breakout.Render(((float)runTime.Elapsed.TotalSeconds));
 
             SwapBuffers();
         }
@@ -56,7 +69,7 @@ namespace OpenGL_Breakout {
             if (e.Key == Keys.Escape)
                 Close();
             if ((int)e.Key >= 0 && (int)e.Key < 1024) {
-                breakout.Keys[(int)e.Key] = true;
+                breakout.keys[(int)e.Key] = true;
             }
         }
 
@@ -64,17 +77,18 @@ namespace OpenGL_Breakout {
             base.OnKeyUp(e);
 
             if ((int)e.Key >= 0 && (int)e.Key < 1024) {
-                breakout.Keys[(int)e.Key] = false;
+                breakout.keys[(int)e.Key] = false;
+                breakout.keysProcessed[(int)e.Key] = false;
             }
         }
 
         protected override void OnResize(ResizeEventArgs e) {
             base.OnResize(e);
 
-            breakout.Width = Size.X;
-            breakout.Height = Size.Y;
+            breakout.Width = ClientSize.X;
+            breakout.Height = ClientSize.Y;
 
-            GL.Viewport(0, 0, Size.X, Size.Y);
+            GL.Viewport(0, 0, ClientSize.X, ClientSize.Y);
         }
 
         protected override void OnClosing(CancelEventArgs e) {

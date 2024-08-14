@@ -1,7 +1,8 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using OpenGL_Breakout.Graphics;
+using OpenTK.Graphics.OpenGL4;
 using StbImageSharp;
 
-namespace OpenGL_Breakout {
+namespace OpenGL_Breakout.Resources {
     internal static class ResourceManager {
         public static Dictionary<string, Shader> Shaders = new();
         public static Dictionary<string, Texture2D> Textures = new();
@@ -68,7 +69,10 @@ namespace OpenGL_Breakout {
             } else
                 colourComponents = ColorComponents.RedGreenBlue;
 
-            StbImage.stbi_set_flip_vertically_on_load(1);
+            //StbImage.stbi_set_flip_vertically_on_load(1);
+
+            if (!File.Exists(file))
+                throw new FileNotFoundException("File doesn't exist");
 
             using FileStream fileStream = File.OpenRead(file);
             ImageResult image = ImageResult.FromStream(fileStream, colourComponents);
