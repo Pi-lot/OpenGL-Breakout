@@ -45,6 +45,7 @@ namespace OpenGL_Breakout.Resources {
             }
 
             ID = GL.CreateProgram();
+
             try {
                 GL.AttachShader(ID, sVertex);
                 GL.AttachShader(ID, sFragment);

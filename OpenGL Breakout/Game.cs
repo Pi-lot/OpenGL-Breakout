@@ -132,7 +132,7 @@ namespace OpenGL_Breakout {
             Vector2 ballPos = playerPos + new Vector2(PLAYER_SIZE.X / 2.0f - BALL_RADIUS, -BALL_RADIUS * 2.0f);
             Ball = new(ballPos, BALL_RADIUS, INITIAL_BALL_VELOCITY, ResourceManager.GetTexture("face"));
 
-            Particles = new(ResourceManager.GetShader("particle"), ResourceManager.GetTexture("particle"), 500);
+            Particles = new(ResourceManager.GetShader("particle"), ResourceManager.GetTexture("particle"), 1500);
         }
 
         public void ProcessInput(float dt) {
